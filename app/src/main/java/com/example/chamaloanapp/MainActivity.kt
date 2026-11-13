@@ -1,5 +1,6 @@
 package com.example.chamaloanapp
 
+import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,11 +9,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.ProgressBar
-import android.widget.RadioButton
 import android.widget.RadioGroup
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import retrofit2.Call
 import retrofit2.Callback
@@ -75,41 +77,94 @@ interface ChamaApiService {
 
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+        const val SECTION_LOAN = 0
+        const val SECTION_LEDGER = 1
+        const val SECTION_TREASURER = 2
+        const val SECTION_BYLAWS = 3
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         // ====================================================================
-        // 1. Role Switcher Binding (Member Portal vs Treasurer Console)
+        // 1. Root & Scroll Containers
         // ====================================================================
-        val btnTabMember = findViewById<Button>(R.id.btnTabMember)
-        val btnTabTreasurer = findViewById<Button>(R.id.btnTabTreasurer)
-        val layoutMemberPortal = findViewById<LinearLayout>(R.id.layoutMemberPortal)
-        val layoutTreasurerConsole = findViewById<LinearLayout>(R.id.layoutTreasurerConsole)
+        val mainScrollView = findViewById<ScrollView>(R.id.mainScrollView)
+        val tvUserRoleIndicator = findViewById<TextView>(R.id.tvUserRoleIndicator)
+        val btnQuickMenu = findViewById<Button>(R.id.btnQuickMenu)
 
-        fun selectTab(isMember: Boolean) {
-            if (isMember) {
-                layoutMemberPortal.visibility = View.VISIBLE
-                layoutTreasurerConsole.visibility = View.GONE
-                btnTabMember.setBackgroundResource(R.drawable.bg_tab_selected)
-                btnTabMember.setTextColor(ContextCompat.getColor(this, android.R.color.white))
-                btnTabTreasurer.setBackgroundResource(R.drawable.bg_tab_unselected)
-                btnTabTreasurer.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
-            } else {
-                layoutMemberPortal.visibility = View.GONE
-                layoutTreasurerConsole.visibility = View.VISIBLE
-                btnTabTreasurer.setBackgroundResource(R.drawable.bg_tab_selected)
-                btnTabTreasurer.setTextColor(ContextCompat.getColor(this, android.R.color.white))
-                btnTabMember.setBackgroundResource(R.drawable.bg_tab_unselected)
-                btnTabMember.setTextColor(ContextCompat.getColor(this, R.color.text_secondary))
+        // Functional Section Containers
+        val layoutSectionLoan = findViewById<LinearLayout>(R.id.layoutSectionLoan)
+        val layoutSectionLedger = findViewById<LinearLayout>(R.id.layoutSectionLedger)
+        val layoutSectionTreasurer = findViewById<LinearLayout>(R.id.layoutSectionTreasurer)
+        val layoutSectionBylaws = findViewById<LinearLayout>(R.id.layoutSectionBylaws)
+
+        // Modern Bottom Navigation Tabs
+        val navTabLoan = findViewById<LinearLayout>(R.id.navTabLoan)
+        val navTabLedger = findViewById<LinearLayout>(R.id.navTabLedger)
+        val navTabTreasurer = findViewById<LinearLayout>(R.id.navTabTreasurer)
+        val navTabBylaws = findViewById<LinearLayout>(R.id.navTabBylaws)
+
+        val tvNavTextLoan = findViewById<TextView>(R.id.tvNavTextLoan)
+        val tvNavTextLedger = findViewById<TextView>(R.id.tvNavTextLedger)
+        val tvNavTextTreasurer = findViewById<TextView>(R.id.tvNavTextTreasurer)
+        val tvNavTextBylaws = findViewById<TextView>(R.id.tvNavTextBylaws)
+
+        // ====================================================================
+        // 2. Modern Navigation Controller Function
+        // ====================================================================
+        fun switchSection(section: Int) {
+            // A. Manage Section Visibility
+            layoutSectionLoan.visibility = if (section == SECTION_LOAN) View.VISIBLE else View.GONE
+            layoutSectionLedger.visibility = if (section == SECTION_LEDGER) View.VISIBLE else View.GONE
+            layoutSectionTreasurer.visibility = if (section == SECTION_TREASURER) View.VISIBLE else View.GONE
+            layoutSectionBylaws.visibility = if (section == SECTION_BYLAWS) View.VISIBLE else View.GONE
+
+            // B. Update Bottom Navigation Tab Backgrounds
+            navTabLoan.setBackgroundResource(if (section == SECTION_LOAN) R.drawable.bg_nav_item_active else android.R.color.transparent)
+            navTabLedger.setBackgroundResource(if (section == SECTION_LEDGER) R.drawable.bg_nav_item_active else android.R.color.transparent)
+            navTabTreasurer.setBackgroundResource(if (section == SECTION_TREASURER) R.drawable.bg_nav_item_active else android.R.color.transparent)
+            navTabBylaws.setBackgroundResource(if (section == SECTION_BYLAWS) R.drawable.bg_nav_item_active else android.R.color.transparent)
+
+            // C. Update Tab Text Colors & Weight
+            val colorPrimary = ContextCompat.getColor(this, R.color.brand_primary)
+            val colorSecondary = ContextCompat.getColor(this, R.color.text_secondary)
+
+            tvNavTextLoan.setTextColor(if (section == SECTION_LOAN) colorPrimary else colorSecondary)
+            tvNavTextLoan.setTypeface(null, if (section == SECTION_LOAN) Typeface.BOLD else Typeface.NORMAL)
+
+            tvNavTextLedger.setTextColor(if (section == SECTION_LEDGER) colorPrimary else colorSecondary)
+            tvNavTextLedger.setTypeface(null, if (section == SECTION_LEDGER) Typeface.BOLD else Typeface.NORMAL)
+
+            tvNavTextTreasurer.setTextColor(if (section == SECTION_TREASURER) colorPrimary else colorSecondary)
+            tvNavTextTreasurer.setTypeface(null, if (section == SECTION_TREASURER) Typeface.BOLD else Typeface.NORMAL)
+
+            tvNavTextBylaws.setTextColor(if (section == SECTION_BYLAWS) colorPrimary else colorSecondary)
+            tvNavTextBylaws.setTypeface(null, if (section == SECTION_BYLAWS) Typeface.BOLD else Typeface.NORMAL)
+
+            // D. Context Header Indicator
+            tvUserRoleIndicator.text = when (section) {
+                SECTION_LOAN -> "👤 Member • Apply"
+                SECTION_LEDGER -> "📊 Member • Ledger"
+                SECTION_TREASURER -> "💼 Treasurer • Console"
+                SECTION_BYLAWS -> "📜 Chama • Bylaws"
+                else -> "👤 Member Mode"
             }
+
+            // E. Smooth Scroll to Top
+            mainScrollView.smoothScrollTo(0, 0)
         }
 
-        btnTabMember.setOnClickListener { selectTab(true) }
-        btnTabTreasurer.setOnClickListener { selectTab(false) }
+        // Setup Bottom Nav Click Listeners
+        navTabLoan.setOnClickListener { switchSection(SECTION_LOAN) }
+        navTabLedger.setOnClickListener { switchSection(SECTION_LEDGER) }
+        navTabTreasurer.setOnClickListener { switchSection(SECTION_TREASURER) }
+        navTabBylaws.setOnClickListener { switchSection(SECTION_BYLAWS) }
 
         // ====================================================================
-        // 2. Financial Snapshot & Form Input Binding
+        // 3. Form Input & Financial Snapshot Binding
         // ====================================================================
         val tvSnapshotSavings = findViewById<TextView>(R.id.tvSnapshotSavings)
         val tvSnapshotLimit = findViewById<TextView>(R.id.tvSnapshotLimit)
@@ -124,7 +179,7 @@ class MainActivity : AppCompatActivity() {
         val btnCheckEligibility = findViewById<Button>(R.id.btnCheckEligibility)
         val progressBar = findViewById<ProgressBar>(R.id.progressBar)
 
-        // Reactive HCD feedback: update snapshot cards when savings balance changes
+        // Dynamic reactive savings feedback (HCD principle)
         etMemberSavings.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -136,7 +191,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         // ====================================================================
-        // 3. Underwriting Assessment & Repayment Preview Binding
+        // 4. Underwriting Result & Repayment Preview Binding
         // ====================================================================
         val cardResult = findViewById<LinearLayout>(R.id.cardResult)
         val tvStatusBadge = findViewById<TextView>(R.id.tvStatusBadge)
@@ -151,15 +206,30 @@ class MainActivity : AppCompatActivity() {
         val tvMessage = findViewById<TextView>(R.id.tvMessage)
 
         // ====================================================================
-        // 4. Treasurer Console Demonstration Preset Buttons
+        // 5. Presets & Additional Action Buttons
         // ====================================================================
         val btnPresetPrime = findViewById<Button>(R.id.btnPresetPrime)
         val btnPresetGuarantor = findViewById<Button>(R.id.btnPresetGuarantor)
         val btnPresetCapExceeded = findViewById<Button>(R.id.btnPresetCapExceeded)
         val btnPresetDefault = findViewById<Button>(R.id.btnPresetDefault)
 
+        val btnRequestStatement = findViewById<Button>(R.id.btnRequestStatement)
+        val btnBylawsToLoan = findViewById<Button>(R.id.btnBylawsToLoan)
+
+        btnRequestStatement.setOnClickListener {
+            Toast.makeText(
+                this,
+                "Official PDF Statement for MBR-0191959 generated and dispatched to registered email.",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+
+        btnBylawsToLoan.setOnClickListener {
+            switchSection(SECTION_LOAN)
+        }
+
         btnPresetPrime.setOnClickListener {
-            selectTab(true)
+            switchSection(SECTION_LOAN)
             etApplicantIncome.setText("50000")
             etMemberSavings.setText("40000")
             etCoapplicantIncome.setText("0")
@@ -167,12 +237,12 @@ class MainActivity : AppCompatActivity() {
             etLoanTerm.setText("12")
             rgCreditHistory.check(R.id.rbCreditClean)
             rgPropertyArea.check(R.id.rbAreaSemiurban)
-            Toast.makeText(this, "Loaded: Prime Member Scenario", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Preset: Prime Member loaded", Toast.LENGTH_SHORT).show()
             btnCheckEligibility.performClick()
         }
 
         btnPresetGuarantor.setOnClickListener {
-            selectTab(true)
+            switchSection(SECTION_LOAN)
             etApplicantIncome.setText("22000")
             etMemberSavings.setText("30000")
             etCoapplicantIncome.setText("35000")
@@ -180,12 +250,12 @@ class MainActivity : AppCompatActivity() {
             etLoanTerm.setText("12")
             rgCreditHistory.check(R.id.rbCreditClean)
             rgPropertyArea.check(R.id.rbAreaSemiurban)
-            Toast.makeText(this, "Loaded: Guarantor Rescue Scenario", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Preset: Guarantor Rescue loaded", Toast.LENGTH_SHORT).show()
             btnCheckEligibility.performClick()
         }
 
         btnPresetCapExceeded.setOnClickListener {
-            selectTab(true)
+            switchSection(SECTION_LOAN)
             etApplicantIncome.setText("60000")
             etMemberSavings.setText("25000")
             etCoapplicantIncome.setText("0")
@@ -193,12 +263,12 @@ class MainActivity : AppCompatActivity() {
             etLoanTerm.setText("12")
             rgCreditHistory.check(R.id.rbCreditClean)
             rgPropertyArea.check(R.id.rbAreaUrban)
-            Toast.makeText(this, "Loaded: 3x Cap Exceeded Scenario", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Preset: 3x Cap Exceeded loaded", Toast.LENGTH_SHORT).show()
             btnCheckEligibility.performClick()
         }
 
         btnPresetDefault.setOnClickListener {
-            selectTab(true)
+            switchSection(SECTION_LOAN)
             etApplicantIncome.setText("45000")
             etMemberSavings.setText("30000")
             etCoapplicantIncome.setText("0")
@@ -206,12 +276,42 @@ class MainActivity : AppCompatActivity() {
             etLoanTerm.setText("12")
             rgCreditHistory.check(R.id.rbCreditDefault)
             rgPropertyArea.check(R.id.rbAreaRural)
-            Toast.makeText(this, "Loaded: Bad Credit Default Scenario", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Preset: Bad Credit Default loaded", Toast.LENGTH_SHORT).show()
             btnCheckEligibility.performClick()
         }
 
         // ====================================================================
-        // 5. Retrofit Client Configuration
+        // 6. Modern Top Quick Menu (Fast Switcher Menu)
+        // ====================================================================
+        btnQuickMenu.setOnClickListener { view ->
+            val popup = PopupMenu(this, view)
+            popup.menu.add(0, 1, 0, "💳 Apply for Loan / Underwrite")
+            popup.menu.add(0, 2, 1, "📊 My Ledger & Savings Statement")
+            popup.menu.add(0, 3, 2, "💼 Treasurer Admin Console")
+            popup.menu.add(0, 4, 3, "📜 Chama Bylaws & Policy Rules")
+            popup.menu.add(1, 5, 4, "⚡ Run: Prime Member Scenario")
+            popup.menu.add(1, 6, 5, "⚡ Run: Guarantor Rescue Scenario")
+            popup.menu.add(1, 7, 6, "⚡ Run: 3x Cap Exceeded Scenario")
+            popup.menu.add(1, 8, 7, "⚡ Run: Bad Credit Default Scenario")
+
+            popup.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    1 -> switchSection(SECTION_LOAN)
+                    2 -> switchSection(SECTION_LEDGER)
+                    3 -> switchSection(SECTION_TREASURER)
+                    4 -> switchSection(SECTION_BYLAWS)
+                    5 -> btnPresetPrime.performClick()
+                    6 -> btnPresetGuarantor.performClick()
+                    7 -> btnPresetCapExceeded.performClick()
+                    8 -> btnPresetDefault.performClick()
+                }
+                true
+            }
+            popup.show()
+        }
+
+        // ====================================================================
+        // 7. Retrofit Client Configuration
         // ====================================================================
         // 10.0.2.2 maps directly to the host machine's localhost from Android Emulator
         val retrofit = Retrofit.Builder()
@@ -222,7 +322,7 @@ class MainActivity : AppCompatActivity() {
         val apiService = retrofit.create(ChamaApiService::class.java)
 
         // ====================================================================
-        // 6. Underwriting Submission & Dynamic Result Rendering
+        // 8. Underwriting Submission & Dynamic Result Rendering
         // ====================================================================
         btnCheckEligibility.setOnClickListener {
             val incomeStr = etApplicantIncome.text.toString().trim()
