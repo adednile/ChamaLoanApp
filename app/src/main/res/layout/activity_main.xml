@@ -2,68 +2,274 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    android:background="@color/screen_background"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Header Banner -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Chama Loan Underwriter"
+            android:textColor="@color/brand_primary"
+            android:textSize="22sp"
+            android:textStyle="bold" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Chama Loan Eligibility Portal"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp"/>
-
-        <EditText
-            android:id="@+id/etApplicantIncome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Applicant Income (KES)"
-            android:inputType="numberDecimal"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="16dp"
+            android:text="Automated Micro-Credit Scoring &amp; Risk Engine"
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp" />
 
-        <EditText
-            android:id="@+id/etCoapplicantIncome"
+        <!-- CARD 1: Member Financial Profile -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Co-applicant Income (KES)"
-            android:inputType="numberDecimal"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_card_white"
+            android:elevation="2dp"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <EditText
-            android:id="@+id/etLoanAmount"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:text="1. Member Financial Capacity"
+                android:textColor="@color/text_primary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Primary Applicant Monthly Income (KES)"
+                android:textSize="12sp"
+                android:textColor="@color/text_secondary" />
+            <EditText
+                android:id="@+id/etApplicantIncome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="e.g. 35000"
+                android:inputType="numberDecimal"
+                android:layout_marginBottom="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Accumulated Member Savings in Chama (KES)"
+                android:textSize="12sp"
+                android:textColor="@color/text_secondary" />
+            <EditText
+                android:id="@+id/etMemberSavings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="e.g. 50000 (Used for 3x borrowing cap)"
+                android:inputType="numberDecimal"
+                android:layout_marginBottom="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Co-Applicant / Guarantor Monthly Income (KES)"
+                android:textSize="12sp"
+                android:textColor="@color/text_secondary" />
+            <EditText
+                android:id="@+id/etCoapplicantIncome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="0 if no guarantor attached"
+                android:inputType="numberDecimal" />
+        </LinearLayout>
+
+        <!-- CARD 2: Loan Parameters & Credit Standing -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Requested Loan Amount (KES)"
-            android:inputType="numberDecimal"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_card_white"
+            android:elevation="2dp"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <EditText
-            android:id="@+id/etLoanTerm"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Loan Term (Months, e.g., 360)"
-            android:inputType="numberDecimal"
-            android:layout_marginBottom="16dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:text="2. Loan Parameters &amp; Risk History"
+                android:textColor="@color/text_primary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Requested Loan Amount (KES)"
+                android:textSize="12sp"
+                android:textColor="@color/text_secondary" />
+            <EditText
+                android:id="@+id/etLoanAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="e.g. 100000"
+                android:inputType="numberDecimal"
+                android:layout_marginBottom="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Repayment Duration (Months)"
+                android:textSize="12sp"
+                android:textColor="@color/text_secondary" />
+            <EditText
+                android:id="@+id/etLoanTerm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="e.g. 12 or 36"
+                android:inputType="number"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Past Credit Repayment Standing"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                android:layout_marginBottom="4dp" />
+
+            <RadioGroup
+                android:id="@+id/rgCreditHistory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+                <RadioButton
+                    android:id="@+id/rbCreditClean"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Clean Record (1.0)"
+                    android:checked="true"
+                    android:layout_marginEnd="16dp" />
+                <RadioButton
+                    android:id="@+id/rbCreditDefault"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Prior Arrears (0.0)" />
+            </RadioGroup>
+        </LinearLayout>
+
+        <!-- Submit Button & Loader -->
         <Button
             android:id="@+id/btnCheckEligibility"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Check Loan Eligibility"
-            android:backgroundTint="@color/design_default_color_primary"
-            android:layout_marginBottom="16dp"/>
+            android:layout_height="52dp"
+            android:backgroundTint="@color/brand_primary"
+            android:text="Evaluate Loan Eligibility"
+            android:textColor="@android:color/white"
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tvResult"
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"
+            android:visibility="gone" />
+
+        <!-- CARD 3: Dynamic Underwriting Decision Card (Initially GONE) -->
+        <LinearLayout
+            android:id="@+id/cardResult"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Prediction results will appear here."
-            android:textSize="16sp"
-            android:textStyle="italic"/>
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_card_white"
+            android:elevation="3dp"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="12dp">
+
+                <TextView
+                    android:id="@+id/tvStatusBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_badge_approved"
+                    android:paddingHorizontal="14dp"
+                    android:paddingVertical="6dp"
+                    android:text="APPROVED"
+                    android:textColor="@color/status_approved"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/tvRiskTierBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Low Risk"
+                    android:textColor="@color/status_approved"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Probability Bar -->
+            <TextView
+                android:id="@+id/tvProbabilityText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Model Approval Confidence: 82.5%"
+                android:textSize="12sp"
+                android:textColor="@color/text_secondary"
+                android:layout_marginBottom="4dp" />
+
+            <ProgressBar
+                android:id="@+id/pbProbability"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:max="100"
+                android:progress="82"
+                android:progressTint="@color/status_approved"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Committee Directive -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Committee Directive &amp; Rationale:"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary" />
+
+            <TextView
+                android:id="@+id/tvMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Loan conforms to 3x savings multiplier and cash-flow capacity."
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp"
+                android:lineSpacingExtra="2dp"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>
