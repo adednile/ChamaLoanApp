@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/screen_background"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- ── Intro Card ── -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_card_white"
+            android:elevation="2dp"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:layout_marginBottom="14dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chama Constitution &amp; Lending Bylaws"
+                android:textColor="@color/text_primary"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="These rules govern all table-banking credit decisions. They are encoded into the AI underwriting model and enforced automatically on every loan application."
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="6dp" />
+        </LinearLayout>
+
+        <!-- ── Rule 1 ── -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_card_white"
+            android:elevation="2dp"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:layout_marginBottom="10dp">
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:gravity="center_vertical"
+                android:layout_marginBottom="6dp">
+                <TextView android:layout_width="32dp" android:layout_height="32dp"
+                    android:gravity="center" android:background="@drawable/bg_score_circle"
+                    android:text="1" android:textColor="@color/brand_primary"
+                    android:textSize="14sp" android:textStyle="bold" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="  The 3× Savings Borrowing Multiplier"
+                    android:textColor="@color/brand_primary" android:textSize="14sp" android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="A member's maximum loan cannot exceed 300% of their verified Chama savings. Requests beyond this ceiling require an active member guarantor to co-pledge repayment."
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:layout_marginTop="10dp"
+                android:background="@color/card_subtle" android:padding="8dp">
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:text="Savings: KES 40,000"
+                    android:textColor="@color/text_secondary" android:textSize="11sp" />
+                <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:text="→  Max Loan: KES 120,000"
+                    android:textColor="@color/status_approved" android:textSize="11sp" android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- ── Rule 2 ── -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_card_white"
+            android:elevation="2dp"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:layout_marginBottom="10dp">
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:gravity="center_vertical"
+                android:layout_marginBottom="6dp">
+                <TextView android:layout_width="32dp" android:layout_height="32dp"
+                    android:gravity="center" android:background="@drawable/bg_score_circle"
+                    android:text="2" android:textColor="@color/brand_primary"
+                    android:textSize="14sp" android:textStyle="bold" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="  Debt-to-Income (DTI) Ceiling — 45%"
+                    android:textColor="@color/brand_primary" android:textSize="14sp" android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="The monthly loan installment (EMI) must not exceed 45% of total household income. This prevents financial hardship and ensures consistent repayment capacity across the loan term."
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- ── Rule 3 ── -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_card_white"
+            android:elevation="2dp"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:layout_marginBottom="10dp">
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:gravity="center_vertical"
+                android:layout_marginBottom="6dp">
+                <TextView android:layout_width="32dp" android:layout_height="32dp"
+                    android:gravity="center" android:background="@drawable/bg_score_circle"
+                    android:text="3" android:textColor="@color/brand_primary"
+                    android:textSize="14sp" android:textStyle="bold" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="  Ledger Integrity &amp; Delinquency Knockout"
+                    android:textColor="@color/brand_primary" android:textSize="14sp" android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Members with any active default on the Chama ledger (Credit_History = 0.0) or unresolved fines are automatically barred from new disbursements. All arrears must be cleared first."
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- ── Rule 4 ── -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_card_white"
+            android:elevation="2dp"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:layout_marginBottom="10dp">
+
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:gravity="center_vertical"
+                android:layout_marginBottom="6dp">
+                <TextView android:layout_width="32dp" android:layout_height="32dp"
+                    android:gravity="center" android:background="@drawable/bg_score_circle"
+                    android:text="4" android:textColor="@color/brand_primary"
+                    android:textSize="14sp" android:textStyle="bold" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="  10% Reducing-Balance Interest Rate"
+                    android:textColor="@color/brand_primary" android:textSize="14sp" android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="All loans are amortized at 10% annual reducing-balance — meaning interest is charged only on the outstanding principal, reducing every month. This is fair and transparent to all members."
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- ── CTA ── -->
+        <Button
+            android:id="@+id/btnBylawsToLoan"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:backgroundTint="@color/brand_primary"
+            android:text="Test My Eligibility Under These Rules →"
+            android:textColor="@android:color/white"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="24dp" />
+
+    </LinearLayout>
+</ScrollView>
