@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -54,16 +55,19 @@
     </LinearLayout>
 
     <!-- ─────────────────────────────────────────────────── -->
-    <!-- FRAGMENT CONTENT AREA (fills remaining space)      -->
+    <!-- FRAGMENT CONTENT AREA (fills remaining space)       -->
+    <!-- tools:layout displays LoanFragment in Preview window-->
     <!-- ─────────────────────────────────────────────────── -->
     <FrameLayout
         android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        tools:layout="@layout/fragment_loan" />
 
     <!-- ─────────────────────────────────────────────────── -->
-    <!-- BOTTOM NAVIGATION BAR                              -->
+    <!-- BOTTOM NAVIGATION BAR (5 Tabs: Loan, Ledger,        -->
+    <!-- Treasurer, Bylaws, Profile)                        -->
     <!-- ─────────────────────────────────────────────────── -->
     <LinearLayout
         android:id="@+id/bottomNavigation"
@@ -74,7 +78,7 @@
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:paddingHorizontal="4dp"
-        android:weightSum="4">
+        android:weightSum="5">
 
         <!-- Tab: Loan Apply -->
         <LinearLayout
@@ -90,11 +94,11 @@
             android:paddingVertical="6dp">
             <TextView android:id="@+id/tvNavIconLoan"
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="💳" android:textSize="20sp" />
+                android:text="💳" android:textSize="18sp" />
             <TextView android:id="@+id/tvNavTextLoan"
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                 android:text="Loan" android:textColor="@color/brand_primary"
-                android:textSize="11sp" android:textStyle="bold" />
+                android:textSize="10sp" android:textStyle="bold" />
         </LinearLayout>
 
         <!-- Tab: My Ledger -->
@@ -111,11 +115,11 @@
             android:paddingVertical="6dp">
             <TextView android:id="@+id/tvNavIconLedger"
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="📊" android:textSize="20sp" />
+                android:text="📊" android:textSize="18sp" />
             <TextView android:id="@+id/tvNavTextLedger"
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                 android:text="Ledger" android:textColor="@color/text_secondary"
-                android:textSize="11sp" />
+                android:textSize="10sp" />
         </LinearLayout>
 
         <!-- Tab: Treasurer -->
@@ -132,11 +136,11 @@
             android:paddingVertical="6dp">
             <TextView android:id="@+id/tvNavIconTreasurer"
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="💼" android:textSize="20sp" />
+                android:text="💼" android:textSize="18sp" />
             <TextView android:id="@+id/tvNavTextTreasurer"
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="Treasurer" android:textColor="@color/text_secondary"
-                android:textSize="11sp" />
+                android:text="Treasury" android:textColor="@color/text_secondary"
+                android:textSize="10sp" />
         </LinearLayout>
 
         <!-- Tab: Bylaws -->
@@ -153,11 +157,32 @@
             android:paddingVertical="6dp">
             <TextView android:id="@+id/tvNavIconBylaws"
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="📜" android:textSize="20sp" />
+                android:text="📜" android:textSize="18sp" />
             <TextView android:id="@+id/tvNavTextBylaws"
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
                 android:text="Bylaws" android:textColor="@color/text_secondary"
-                android:textSize="11sp" />
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <!-- Tab: Profile / User Management -->
+        <LinearLayout
+            android:id="@+id/navTabProfile"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingVertical="6dp">
+            <TextView android:id="@+id/tvNavIconProfile"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="👤" android:textSize="18sp" />
+            <TextView android:id="@+id/tvNavTextProfile"
+                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Profile" android:textColor="@color/text_secondary"
+                android:textSize="10sp" />
         </LinearLayout>
 
     </LinearLayout>
