@@ -1,7 +1,9 @@
 package com.example.chamaloanapp
 
+import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 // ─────────────────────────────────────────────
@@ -9,46 +11,60 @@ import retrofit2.http.POST
 // ─────────────────────────────────────────────
 
 data class LoanApplicationRequest(
-    val Gender: String = "Male",
-    val Married: String = "Yes",
-    val Dependents: Int = 0,
-    val Education: String = "Graduate",
-    val Self_Employed: String = "No",
-    val ApplicantIncome: Float,
-    val CoapplicantIncome: Float = 0f,
-    val LoanAmount: Float,
-    val MemberSavings: Float? = null,
-    val Loan_Amount_Term: Float = 12f,
-    val Credit_History: Float = 1.0f,
-    val Property_Area: String = "Urban"
+    @SerializedName("Gender") val Gender: String = "Male",
+    @SerializedName("Married") val Married: String = "Yes",
+    @SerializedName("Dependents") val Dependents: Int = 0,
+    @SerializedName("Education") val Education: String = "Graduate",
+    @SerializedName("Self_Employed") val Self_Employed: String = "No",
+    @SerializedName("ApplicantIncome") val ApplicantIncome: Float,
+    @SerializedName("CoapplicantIncome") val CoapplicantIncome: Float = 0f,
+    @SerializedName("LoanAmount") val LoanAmount: Float,
+    @SerializedName("MemberSavings") val MemberSavings: Float? = null,
+    @SerializedName("Loan_Amount_Term") val Loan_Amount_Term: Float = 12f,
+    @SerializedName("Credit_History") val Credit_History: Float = 1.0f,
+    @SerializedName("Property_Area") val Property_Area: String = "Urban"
 )
 
 data class SavingsAssessment(
-    val member_savings_kes: Float? = null,
-    val max_borrowing_limit_kes: Float? = null,
-    val savings_multiplier_compliant: Boolean = true,
-    val savings_leverage_ratio: Float? = null,
-    val excess_requested_kes: Float? = null
+    @SerializedName("member_savings_kes") val member_savings_kes: Float? = null,
+    @SerializedName("max_borrowing_limit_kes") val max_borrowing_limit_kes: Float? = null,
+    @SerializedName("savings_multiplier_compliant") val savings_multiplier_compliant: Boolean = true,
+    @SerializedName("savings_leverage_ratio") val savings_leverage_ratio: Float? = null,
+    @SerializedName("excess_requested_kes") val excess_requested_kes: Float? = null
 )
 
 data class FinancialCapacityAssessment(
-    val total_household_income_kes: Float? = null,
-    val estimated_monthly_installment_kes: Float? = null,
-    val debt_to_income_percent: Float? = null,
-    val cash_flow_viable: Boolean = true
+    @SerializedName("total_household_income_kes") val total_household_income_kes: Float? = null,
+    @SerializedName("estimated_monthly_installment_kes") val estimated_monthly_installment_kes: Float? = null,
+    @SerializedName("debt_to_income_percent") val debt_to_income_percent: Float? = null,
+    @SerializedName("cash_flow_viable") val cash_flow_viable: Boolean = true
 )
 
 data class LoanPredictionResponse(
-    val loan_status: String,
-    val approval_decision_code: Int,
-    val approval_probability: Float,
-    val risk_tier: String,
-    val risk_score_percent: Float? = null,
-    val message: String? = null,
-    val savings_assessment: SavingsAssessment? = null,
-    val financial_capacity: FinancialCapacityAssessment? = null,
-    val committee_action_required: String? = null,
-    val evaluated_at: String? = null
+    @SerializedName("loan_status") val loan_status: String,
+    @SerializedName("approval_decision_code") val approval_decision_code: Int,
+    @SerializedName("approval_probability") val approval_probability: Float,
+    @SerializedName("risk_tier") val risk_tier: String,
+    @SerializedName("risk_score_percent") val risk_score_percent: Float? = null,
+    @SerializedName("message") val message: String? = null,
+    @SerializedName("savings_assessment") val savings_assessment: SavingsAssessment? = null,
+    @SerializedName("financial_capacity") val financial_capacity: FinancialCapacityAssessment? = null,
+    @SerializedName("committee_action_required") val committee_action_required: String? = null,
+    @SerializedName("evaluated_at") val evaluated_at: String? = null
+)
+
+// ─────────────────────────────────────────────
+// Error Response Data Classes (FastAPI 422 / 500)
+// ─────────────────────────────────────────────
+
+data class FastApiValidationError(
+    @SerializedName("loc") val loc: List<String>? = null,
+    @SerializedName("msg") val msg: String? = null,
+    @SerializedName("type") val type: String? = null
+)
+
+data class FastApiErrorResponse(
+    @SerializedName("detail") val detail: Any? = null
 )
 
 // ─────────────────────────────────────────────
@@ -58,6 +74,9 @@ data class LoanPredictionResponse(
 interface ChamaApiService {
     @POST("predict")
     fun predictLoan(@Body request: LoanApplicationRequest): Call<LoanPredictionResponse>
+
+    @GET("/")
+    fun getHealthCheck(): Call<Map<String, Any>>
 }
 
 // ─────────────────────────────────────────────

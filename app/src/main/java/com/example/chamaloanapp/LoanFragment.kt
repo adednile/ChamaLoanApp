@@ -20,8 +20,6 @@ import androidx.fragment.app.Fragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.util.Locale
 
 class LoanFragment : Fragment() {
@@ -29,13 +27,7 @@ class LoanFragment : Fragment() {
     private var selectedTermMonths: Float = 12f
     private var requestedPrincipalKes: Float = 100000f
 
-    private val apiService: ChamaApiService by lazy {
-        Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8000/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(ChamaApiService::class.java)
-    }
+    private val apiService: ChamaApiService get() = RetrofitClient.apiService
 
     companion object {
         fun newInstance(preset: LoanPreset? = null): LoanFragment {
@@ -210,15 +202,67 @@ class LoanFragment : Fragment() {
 
         // Submit to AI Underwriting Engine
         btnCheckEligibility.setOnClickListener {
+            // Reset previous field errors
+            etApplicantIncome.error = null
+            etMemberSavings.error = null
+            etCoapplicantIncome.error = null
+
             val incomeStr = etApplicantIncome.text.toString().trim()
             val savingsStr = etMemberSavings.text.toString().trim()
             val coIncomeStr = etCoapplicantIncome.text.toString().trim()
 
-            if (incomeStr.isEmpty()) { etApplicantIncome.error = "Required"; return@setOnClickListener }
+            // 1. Client-Side Input Validation
+            if (incomeStr.isEmpty()) {
+                etApplicantIncome.error = "Applicant income is required"
+                etApplicantIncome.requestFocus()
+                return@setOnClickListener
+            }
+            val applicantIncome = incomeStr.toFloatOrNull()
+            if (applicantIncome == null || applicantIncome <= 0f) {
+                etApplicantIncome.error = "Enter a valid positive monthly income"
+                etApplicantIncome.requestFocus()
+                return@setOnClickListener
+            }
 
-            val applicantIncome = incomeStr.toFloatOrNull() ?: 0f
-            val coapplicantIncome = coIncomeStr.toFloatOrNull() ?: 0f
+            if (savingsStr.isEmpty()) {
+                etMemberSavings.error = "Member savings is required for Chama 3x limit"
+                etMemberSavings.requestFocus()
+                return@setOnClickListener
+            }
             val memberSavings = savingsStr.toFloatOrNull()
+            if (memberSavings == null || memberSavings <= 0f) {
+                etMemberSavings.error = "Enter a valid positive savings balance"
+                etMemberSavings.requestFocus()
+                return@setOnClickListener
+            }
+
+            val coapplicantIncome = if (coIncomeStr.isNotEmpty()) {
+                val parsed = coIncomeStr.toFloatOrNull()
+                if (parsed == null || parsed < 0f) {
+                    etCoapplicantIncome.error = "Enter a valid co-applicant income (>= 0)"
+                    etCoapplicantIncome.requestFocus()
+                    return@setOnClickListener
+                }
+                parsed
+            } else {
+                0f
+            }
+
+            if (requestedPrincipalKes < 5000f) {
+                Toast.makeText(requireContext(), "Minimum loan application is KES 5,000", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // 2. Pre-Flight Connectivity Check
+            if (!NetworkUtils.isNetworkAvailable(requireContext())) {
+                Toast.makeText(
+                    requireContext(),
+                    "Offline: No active network connection detected. Please connect to Wi-Fi/cellular.",
+                    Toast.LENGTH_LONG
+                ).show()
+                return@setOnClickListener
+            }
+
             val creditHistory = if (rgCreditHistory.checkedRadioButtonId == R.id.rbCreditClean) 1.0f else 0.0f
             val propertyArea = when (rgPropertyArea.checkedRadioButtonId) {
                 R.id.rbAreaSemiurban -> "Semiurban"
@@ -227,7 +271,7 @@ class LoanFragment : Fragment() {
             }
 
             val normalizedLoan = requestedPrincipalKes / 1000f
-            val normalizedSavings = memberSavings?.let { if (it >= 1000f) it / 1000f else it }
+            val normalizedSavings = if (memberSavings >= 1000f) memberSavings / 1000f else memberSavings
 
             val request = LoanApplicationRequest(
                 ApplicantIncome = applicantIncome,
@@ -299,7 +343,7 @@ class LoanFragment : Fragment() {
                         tvEstMonthlyPayment.text = String.format(Locale.US, "KES %,.2f", emi)
                         tvTotalInterest.text = String.format(Locale.US, "KES %,.2f", totalInterest)
 
-                        val savingsKes = memberSavings?.let { if (it < 1000f) it * 1000f else it } ?: 40000f
+                        val savingsKes = if (memberSavings < 1000f) memberSavings * 1000f else memberSavings
                         val maxEligible = res.savings_assessment?.max_borrowing_limit_kes ?: (savingsKes * 3f)
                         val savingsOk = res.savings_assessment?.savings_multiplier_compliant ?: (requestedPrincipalKes <= maxEligible)
                         val leverage = if (savingsKes > 0) requestedPrincipalKes / savingsKes else 0f
@@ -325,7 +369,18 @@ class LoanFragment : Fragment() {
                         tvMessage.text = res.committee_action_required ?: res.message ?: "Decision computed based on Chama bylaws."
 
                     } else {
-                        Toast.makeText(requireContext(), "Server Error: ${response.code()}", Toast.LENGTH_LONG).show()
+                        val errorDetail = try {
+                            response.errorBody()?.string() ?: ""
+                        } catch (e: Exception) {
+                            ""
+                        }
+                        val userMsg = when (response.code()) {
+                            422 -> "Validation Error (422): Backend rejected request parameters.\n$errorDetail"
+                            500 -> "Server Error (500): Internal Underwriting Engine fault."
+                            503 -> "Service Unavailable (503): Backend model is initializing."
+                            else -> "Server Error ${response.code()}: ${response.message()}"
+                        }
+                        Toast.makeText(requireContext(), userMsg, Toast.LENGTH_LONG).show()
                     }
                 }
 
@@ -333,7 +388,18 @@ class LoanFragment : Fragment() {
                     if (!isAdded) return
                     progressBar.visibility = View.GONE
                     btnCheckEligibility.isEnabled = true
-                    Toast.makeText(requireContext(), "Connection failed: Ensure FastAPI is running on port 8000.", Toast.LENGTH_LONG).show()
+
+                    val errorMsg = when (t) {
+                        is java.net.ConnectException ->
+                            "Connection failed: Cannot reach Chama AI Service. Ensure FastAPI is running on ${RetrofitClient.getBaseUrl()} (port 8000)."
+                        is java.net.SocketTimeoutException ->
+                            "Request timed out: Underwriting server took too long to respond. Please try again."
+                        is java.net.UnknownHostException ->
+                            "Network resolution error: Cannot resolve host. Check network settings."
+                        else ->
+                            "Network failure: ${t.localizedMessage ?: "Unknown error occurred"}"
+                    }
+                    Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_LONG).show()
                 }
             })
         }

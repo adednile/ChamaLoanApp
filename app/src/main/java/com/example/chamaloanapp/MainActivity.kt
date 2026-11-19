@@ -9,6 +9,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
@@ -116,6 +117,7 @@ class MainActivity : AppCompatActivity() {
             popup.menu.add(1, 11, 8, "⚡  Guarantor Rescue (Demo)")
             popup.menu.add(1, 12, 9, "⚡  3× Cap Exceeded (Demo)")
             popup.menu.add(1, 13, 10, "⚡  Bad Credit Default (Demo)")
+            popup.menu.add(2, 999, 11, "🔌  Ping Backend (10.0.2.2:8000)")
             popup.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     100 -> showDashboard()
@@ -129,6 +131,7 @@ class MainActivity : AppCompatActivity() {
                     11 -> navigateToLoanWithPreset(LoanPresets.GUARANTOR)
                     12 -> navigateToLoanWithPreset(LoanPresets.CAP_EXCEEDED)
                     13 -> navigateToLoanWithPreset(LoanPresets.BAD_CREDIT)
+                    999 -> testBackendConnection()
                 }
                 true
             }
@@ -137,6 +140,37 @@ class MainActivity : AppCompatActivity() {
 
         // Default: Start on Home Dashboard
         showDashboard()
+    }
+
+    /**
+     * Pings the FastAPI backend service to verify connectivity.
+     * Useful for examiner demonstration and offline diagnostics.
+     */
+    fun testBackendConnection() {
+        if (!NetworkUtils.isNetworkAvailable(this)) {
+            Toast.makeText(this, "Device is offline. Please check network/Wi-Fi connection.", Toast.LENGTH_LONG).show()
+            return
+        }
+        val baseUrl = RetrofitClient.getBaseUrl()
+        Toast.makeText(this, "Pinging FastAPI backend at $baseUrl...", Toast.LENGTH_SHORT).show()
+        RetrofitClient.apiService.getHealthCheck().enqueue(object : retrofit2.Callback<Map<String, Any>> {
+            override fun onResponse(call: retrofit2.Call<Map<String, Any>>, response: retrofit2.Response<Map<String, Any>>) {
+                if (response.isSuccessful) {
+                    Toast.makeText(this@MainActivity, "Connected! Backend is ONLINE (HTTP 200).", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(this@MainActivity, "Backend reached: HTTP ${response.code()}", Toast.LENGTH_LONG).show()
+                }
+            }
+
+            override fun onFailure(call: retrofit2.Call<Map<String, Any>>, t: Throwable) {
+                val reason = when (t) {
+                    is java.net.ConnectException -> "Connection refused: Ensure FastAPI is running on $baseUrl"
+                    is java.net.SocketTimeoutException -> "Timed out waiting for backend response."
+                    else -> t.localizedMessage ?: "Network error"
+                }
+                Toast.makeText(this@MainActivity, "Backend OFFLINE: $reason", Toast.LENGTH_LONG).show()
+            }
+        })
     }
 
     /** Shows the main activity dashboard directly */
