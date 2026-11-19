@@ -11,84 +11,335 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- ── Group Liquidity Portfolio ── -->
+        <!-- ── Top Group Liquidity Summary (Dynamic Live Figures) ── -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_card_white"
-            android:elevation="2dp"
+            android:background="@drawable/bg_header_gradient"
+            android:elevation="4dp"
             android:orientation="vertical"
-            android:padding="16dp"
-            android:layout_marginBottom="14dp">
+            android:padding="18dp"
+            android:layout_marginBottom="16dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Chama Group Portfolio"
-                android:textColor="@color/text_primary"
-                android:textSize="16sp"
+                android:text="TREASURY CONSOLE • MWANGAZA CHAMA"
+                android:textColor="#99FFFFFF"
+                android:textSize="10sp"
+                android:letterSpacing="0.1"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Real-time reserve snapshot · Mwangaza Chama · November 2026"
-                android:textColor="@color/text_secondary"
-                android:textSize="11sp"
+                android:text="Group Liquidity &amp; Ledger Auditing"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 android:layout_marginBottom="12dp" />
 
-            <!-- Row 1 -->
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:orientation="horizontal" android:layout_marginBottom="8dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="#20FFFFFF"
+                android:padding="12dp">
 
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
-                    android:layout_weight="1" android:background="@color/card_subtle"
-                    android:padding="10dp" android:layout_marginEnd="6dp" android:orientation="vertical">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Total Savings Pool" android:textSize="11sp" android:textColor="@color/text_secondary" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="KES 285,000" android:textSize="16sp" android:textStyle="bold"
-                        android:textColor="@color/brand_primary" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total Group Pool"
+                        android:textSize="11sp"
+                        android:textColor="#B2FFFFFF" />
+                    <TextView
+                        android:id="@+id/tvTreasuryGroupPool"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="KES 285,000"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/white" />
                 </LinearLayout>
 
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
-                    android:layout_weight="1" android:background="@color/card_subtle"
-                    android:padding="10dp" android:layout_marginStart="6dp" android:orientation="vertical">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Active Disbursed" android:textSize="11sp" android:textColor="@color/text_secondary" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="KES 150,000" android:textSize="16sp" android:textStyle="bold"
-                        android:textColor="@color/brand_gold" />
-                </LinearLayout>
-            </LinearLayout>
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#33FFFFFF"
+                    android:layout_marginHorizontal="8dp" />
 
-            <!-- Row 2 -->
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
-                    android:layout_weight="1" android:background="@color/card_subtle"
-                    android:padding="10dp" android:layout_marginEnd="6dp" android:orientation="vertical">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Available Liquidity" android:textSize="11sp" android:textColor="@color/text_secondary" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="KES 135,000" android:textSize="14sp" android:textStyle="bold"
-                        android:textColor="@color/status_approved" />
-                </LinearLayout>
-
-                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
-                    android:layout_weight="1" android:background="@color/card_subtle"
-                    android:padding="10dp" android:layout_marginStart="6dp" android:orientation="vertical">
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="Non-Performing Loans" android:textSize="11sp" android:textColor="@color/text_secondary" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="0.0% — Zero Default" android:textSize="14sp" android:textStyle="bold"
-                        android:textColor="@color/status_approved" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Active Disbursed"
+                        android:textSize="11sp"
+                        android:textColor="#B2FFFFFF" />
+                    <TextView
+                        android:id="@+id/tvTreasuryActiveDisbursed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="KES 150,000"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#86EFAC" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
 
-        <!-- ── Active Loan Applications Table ── -->
+        <!-- ── M-PESA SMS PARSER & TRANSACTION INGESTION CARD ── -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_card_white"
+            android:elevation="3dp"
+            android:orientation="vertical"
+            android:padding="18dp"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="4dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="M-Pesa SMS Ingestion &amp; Reconciler"
+                    android:textColor="@color/text_primary"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_badge_approved"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="3dp"
+                    android:text="KENYA MPESA"
+                    android:textColor="@color/status_approved"
+                    android:textSize="9sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Paste an M-Pesa receipt text below. The parser extracts the code, amount, and auto-resolves the member."
+                android:textColor="@color/text_secondary"
+                android:textSize="11sp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Input Box for M-Pesa SMS -->
+            <EditText
+                android:id="@+id/etMpesaSmsInput"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:background="@drawable/bg_input_field"
+                android:gravity="top|start"
+                android:padding="10dp"
+                android:hint="e.g. QK99248M Confirmed. Ksh5,000.00 received from ELI NDEDA 0712345678 on 12/11/26 at 2:45 PM"
+                android:textSize="12sp"
+                android:inputType="textMultiLine"
+                android:layout_marginBottom="10dp" />
+
+            <!-- Quick Template Buttons for Examiner Testing -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Quick Sample Templates (Tap to Fill):"
+                android:textSize="11sp"
+                android:textColor="@color/text_muted"
+                android:layout_marginBottom="6dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp">
+
+                <Button
+                    android:id="@+id/btnSampleEliDeposit"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/card_subtle"
+                    android:text="Sample: Eli 5k Shares"
+                    android:textColor="@color/brand_primary"
+                    android:textSize="10sp"
+                    android:layout_marginEnd="4dp" />
+
+                <Button
+                    android:id="@+id/btnSampleAlexRepay"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/card_subtle"
+                    android:text="Sample: Alex 10k Repay"
+                    android:textColor="@color/brand_primary"
+                    android:textSize="10sp"
+                    android:layout_marginStart="4dp" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnParseMpesaSms"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:background="@drawable/bg_btn_primary"
+                android:text="⚡ Parse &amp; Map to Member"
+                android:textColor="@android:color/white"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <!-- ── Parsed Extraction & Mapping Confirmation Box (Hidden until parsed) ── -->
+            <LinearLayout
+                android:id="@+id/layoutParsedResult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/card_subtle"
+                android:orientation="vertical"
+                android:padding="14dp"
+                android:layout_marginTop="14dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Parsed M-Pesa Record:"
+                    android:textColor="@color/text_primary"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="6dp" />
+
+                <!-- Details Grid -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="4dp">
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:text="Tx Code:"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="11sp" />
+                    <TextView
+                        android:id="@+id/tvParsedCode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="QK99248M"
+                        android:textColor="@color/text_primary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="4dp">
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:text="Amount (KES):"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="11sp" />
+                    <TextView
+                        android:id="@+id/tvParsedAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="KES 5,000.00"
+                        android:textColor="@color/brand_primary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp">
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:text="Sender Phone:"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="11sp" />
+                    <TextView
+                        android:id="@+id/tvParsedSender"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ELI NDEDA (0712345678)"
+                        android:textColor="@color/text_primary"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/border_light"
+                    android:layout_marginVertical="6dp" />
+
+                <!-- Member Match Resolution -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Target Chama Member:"
+                    android:textColor="@color/text_primary"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
+
+                <Spinner
+                    android:id="@+id/spnTargetMember"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_input_field"
+                    android:layout_marginBottom="10dp" />
+
+                <!-- Classification Spinner -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Transaction Category:"
+                    android:textColor="@color/text_primary"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="4dp" />
+
+                <Spinner
+                    android:id="@+id/spnTransactionType"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:background="@drawable/bg_input_field"
+                    android:layout_marginBottom="14dp" />
+
+                <!-- Commit Button -->
+                <Button
+                    android:id="@+id/btnCommitTransaction"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:backgroundTint="@color/status_approved"
+                    android:text="✓ Reconcile &amp; Post to Member Ledger"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- ── Live Reconciled Transaction Log Table ── -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -96,64 +347,46 @@
             android:elevation="2dp"
             android:orientation="vertical"
             android:padding="16dp"
-            android:layout_marginBottom="14dp">
+            android:layout_marginBottom="16dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pending Loan Applications"
+                android:text="Reconciled Ingestion Log (Today)"
                 android:textColor="@color/text_primary"
-                android:textSize="15sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="All deposits verified and posted directly into group accounts."
+                android:textColor="@color/text_secondary"
+                android:textSize="11sp"
                 android:layout_marginBottom="10dp" />
 
-            <!-- Header row -->
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:orientation="horizontal" android:background="@color/brand_primary"
-                android:padding="8dp">
-                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="2"
-                    android:text="Member" android:textColor="@android:color/white" android:textSize="11sp" android:textStyle="bold" />
-                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="2"
-                    android:text="Amount" android:textColor="@android:color/white" android:textSize="11sp" android:textStyle="bold" />
-                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="2"
-                    android:text="Status" android:textColor="@android:color/white" android:textSize="11sp" android:textStyle="bold" />
-            </LinearLayout>
+            <!-- Container for Dynamically Added Transactions -->
+            <LinearLayout
+                android:id="@+id/layoutReconciledList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-            <!-- Data Row 1 -->
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:orientation="horizontal" android:background="@color/card_subtle" android:padding="8dp">
-                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="2"
-                    android:text="J. Mwangi" android:textColor="@color/text_primary" android:textSize="12sp" />
-                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="2"
-                    android:text="KES 80,000" android:textColor="@color/text_primary" android:textSize="12sp" />
-                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="2"
-                    android:text="Reviewing" android:textColor="@color/status_warning" android:textSize="12sp" android:textStyle="bold" />
-            </LinearLayout>
-
-            <!-- Data Row 2 -->
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:orientation="horizontal" android:padding="8dp">
-                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="2"
-                    android:text="A. Odhiambo" android:textColor="@color/text_primary" android:textSize="12sp" />
-                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="2"
-                    android:text="KES 60,000" android:textColor="@color/text_primary" android:textSize="12sp" />
-                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="2"
-                    android:text="Approved" android:textColor="@color/status_approved" android:textSize="12sp" android:textStyle="bold" />
-            </LinearLayout>
-
-            <!-- Data Row 3 -->
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:orientation="horizontal" android:background="@color/card_subtle" android:padding="8dp">
-                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="2"
-                    android:text="F. Kamau" android:textColor="@color/text_primary" android:textSize="12sp" />
-                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="2"
-                    android:text="KES 150,000" android:textColor="@color/text_primary" android:textSize="12sp" />
-                <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="2"
-                    android:text="Rejected" android:textColor="@color/status_rejected" android:textSize="12sp" android:textStyle="bold" />
+                <!-- Placeholder empty state -->
+                <TextView
+                    android:id="@+id/tvEmptyReconcilePlaceholder"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="No transactions reconciled yet in this session. Parse an M-Pesa SMS above to post records."
+                    android:textColor="@color/text_muted"
+                    android:textSize="11sp"
+                    android:paddingVertical="12dp"
+                    android:gravity="center" />
             </LinearLayout>
         </LinearLayout>
 
-        <!-- ── Demo Presets ── -->
+        <!-- ── Examiner Live Demonstration Presets ── -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -174,40 +407,61 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Loads a pre-validated scenario into the Loan screen and runs the AI model."
+                android:text="One-tap scenarios mapped to RandomForest_Base.ipynb"
                 android:textColor="@color/text_secondary"
                 android:textSize="11sp"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="10dp" />
 
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-                android:orientation="horizontal" android:layout_marginBottom="8dp">
-                <Button android:id="@+id/btnPresetPrime"
-                    android:layout_width="0dp" android:layout_height="44dp" android:layout_weight="1"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+                <Button
+                    android:id="@+id/btnPresetPrime"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
                     android:backgroundTint="@color/status_approved"
-                    android:text="✓  Prime Member"
-                    android:textSize="11sp" android:textColor="@android:color/white"
+                    android:text="Prime Member"
+                    android:textSize="11sp"
+                    android:textColor="@android:color/white"
                     android:layout_marginEnd="4dp" />
-                <Button android:id="@+id/btnPresetGuarantor"
-                    android:layout_width="0dp" android:layout_height="44dp" android:layout_weight="1"
+                <Button
+                    android:id="@+id/btnPresetGuarantor"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
                     android:backgroundTint="@color/status_warning"
-                    android:text="⚠  Guarantor Rescue"
-                    android:textSize="11sp" android:textColor="@android:color/white"
+                    android:text="Guarantor Rescue"
+                    android:textSize="11sp"
+                    android:textColor="@android:color/white"
                     android:layout_marginStart="4dp" />
             </LinearLayout>
 
-            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
-                <Button android:id="@+id/btnPresetCapExceeded"
-                    android:layout_width="0dp" android:layout_height="44dp" android:layout_weight="1"
+                <Button
+                    android:id="@+id/btnPresetCapExceeded"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
                     android:backgroundTint="@color/brand_primary"
-                    android:text="⛔  3× Cap Exceeded"
-                    android:textSize="11sp" android:textColor="@android:color/white"
+                    android:text="3x Cap Exceeded"
+                    android:textSize="11sp"
+                    android:textColor="@android:color/white"
                     android:layout_marginEnd="4dp" />
-                <Button android:id="@+id/btnPresetDefault"
-                    android:layout_width="0dp" android:layout_height="44dp" android:layout_weight="1"
+                <Button
+                    android:id="@+id/btnPresetDefault"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
                     android:backgroundTint="@color/status_rejected"
-                    android:text="✗  Bad Credit Default"
-                    android:textSize="11sp" android:textColor="@android:color/white"
+                    android:text="Bad Credit Default"
+                    android:textSize="11sp"
+                    android:textColor="@android:color/white"
                     android:layout_marginStart="4dp" />
             </LinearLayout>
         </LinearLayout>
