@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/brand_primary"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <!-- App Logo / Icon Circle -->
+    <LinearLayout
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/bg_splash_logo"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_marginBottom="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="💰"
+            android:textSize="40sp" />
+    </LinearLayout>
+
+    <!-- App Name -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chama Gold &amp; Trust"
+        android:textColor="@android:color/white"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="6dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Automated Financial Ledger &amp; Loan Platform"
+        android:textColor="#B2FFFFFF"
+        android:textSize="13sp"
+        android:gravity="center"
+        android:paddingHorizontal="32dp"
+        android:layout_marginBottom="40dp" />
+
+    <!-- Loading Spinner -->
+    <ProgressBar
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:indeterminateTint="@android:color/white"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Loading your Chama…"
+        android:textColor="#80FFFFFF"
+        android:textSize="12sp" />
+
+    <!-- Bottom: Version tag -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginTop="80dp"
+        android:text="Strathmore University — SCES Project 2026 • v1.0"
+        android:textColor="#66FFFFFF"
+        android:textSize="10sp"
+        android:gravity="center" />
+
+</LinearLayout>

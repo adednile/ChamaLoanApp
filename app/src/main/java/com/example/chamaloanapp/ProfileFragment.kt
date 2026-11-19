@@ -1,6 +1,7 @@
 package com.example.chamaloanapp
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -74,7 +75,11 @@ class ProfileFragment : Fragment() {
         }
 
         btnLogout.setOnClickListener {
-            Toast.makeText(requireContext(), "Session ended. In a production app, this returns to sign-in.", Toast.LENGTH_LONG).show()
+            prefs.edit().putBoolean("is_logged_in", false).apply()
+            Toast.makeText(requireContext(), "Signed out successfully.", Toast.LENGTH_SHORT).show()
+            val intent = Intent(requireContext(), LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
         }
     }
 }

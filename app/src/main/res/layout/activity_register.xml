@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/screen_background"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <!-- Header Banner -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:background="@color/brand_primary"
+            android:orientation="vertical"
+            android:gravity="bottom|center_horizontal"
+            android:paddingBottom="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Register Your Chama Account"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="One-time setup · Your Treasurer assigns your Member ID"
+                android:textColor="#B2FFFFFF"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <!-- Register Form Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_card_white"
+            android:elevation="4dp"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="-16dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Full Legal Name *"
+                android:textColor="@color/text_primary"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
+            <EditText
+                android:id="@+id/etRegisterName"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="As on your National ID"
+                android:inputType="textPersonName"
+                android:textSize="14sp"
+                android:paddingHorizontal="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/bg_input_field" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="M-Pesa Phone Number *"
+                android:textColor="@color/text_primary"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
+            <EditText
+                android:id="@+id/etRegisterPhone"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="+254 7XX XXX XXX"
+                android:inputType="phone"
+                android:textSize="14sp"
+                android:paddingHorizontal="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/bg_input_field" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="National ID Number *"
+                android:textColor="@color/text_primary"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
+            <EditText
+                android:id="@+id/etRegisterNationalId"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="8-digit National ID"
+                android:inputType="number"
+                android:maxLength="8"
+                android:textSize="14sp"
+                android:paddingHorizontal="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/bg_input_field" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chama Group Code *"
+                android:textColor="@color/text_primary"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
+            <EditText
+                android:id="@+id/etRegisterGroupCode"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="e.g. CH-4482 (from your Treasurer)"
+                android:inputType="text"
+                android:textSize="14sp"
+                android:paddingHorizontal="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/bg_input_field" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Set 4-Digit Security PIN *"
+                android:textColor="@color/text_primary"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
+            <EditText
+                android:id="@+id/etRegisterPin"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Choose a 4-digit PIN"
+                android:inputType="numberPassword"
+                android:maxLength="4"
+                android:textSize="20sp"
+                android:letterSpacing="0.3"
+                android:gravity="center"
+                android:paddingHorizontal="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/bg_input_field" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Confirm PIN *"
+                android:textColor="@color/text_primary"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
+            <EditText
+                android:id="@+id/etRegisterPinConfirm"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Repeat your PIN"
+                android:inputType="numberPassword"
+                android:maxLength="4"
+                android:textSize="20sp"
+                android:letterSpacing="0.3"
+                android:gravity="center"
+                android:paddingHorizontal="12dp"
+                android:layout_marginBottom="6dp"
+                android:background="@drawable/bg_input_field" />
+
+            <!-- Error text -->
+            <TextView
+                android:id="@+id/tvRegisterError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/status_rejected"
+                android:textSize="12sp"
+                android:layout_marginBottom="16dp"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/btnRegisterSubmit"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/bg_btn_primary"
+                android:text="Create Chama Account"
+                android:textColor="@android:color/white"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
+
+            <Button
+                android:id="@+id/btnBackToLogin"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:backgroundTint="@color/screen_background"
+                android:text="← Back to Sign In"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
