@@ -1,5 +1,6 @@
 package com.example.chamaloanapp
 
+import android.os.Build
 import android.util.Log
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -12,19 +13,50 @@ import java.util.concurrent.TimeUnit
 /**
  * Singleton networking client managing Retrofit and OkHttpClient configurations.
  * 
- * Configured specifically for local emulator loopback (http://10.0.2.2:8000/)
- * and expandable for local LAN device testing.
+ * Auto-detects whether the app is running on an Android Studio Emulator
+ * (http://10.0.2.2:8000/) or a physical Android phone via USB/Wi-Fi (http://127.0.0.1:8000/).
  */
 object RetrofitClient {
 
     private const val TAG = "RetrofitClient"
 
     // Default loopback URL for standard Android Studio Emulator (AVD)
-    // 10.0.2.2 routes directly to host machine's 127.0.0.1
-    const val DEFAULT_BASE_URL = "http://10.0.2.2:8000/"
+    const val EMULATOR_BASE_URL = "http://10.0.2.2:8000/"
+
+    // Default URL for physical device connected via USB with "adb reverse tcp:8000 tcp:8000"
+    const val PHYSICAL_USB_BASE_URL = "http://127.0.0.1:8000/"
+
+    /**
+     * Checks if the device running the app is an Android Emulator or a real physical phone.
+     */
+    fun isEmulator(): Boolean {
+        return (Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic"))
+                || Build.FINGERPRINT.startsWith("generic")
+                || Build.FINGERPRINT.startsWith("unknown")
+                || Build.HARDWARE.contains("goldfish")
+                || Build.HARDWARE.contains("ranchu")
+                || Build.MODEL.contains("google_sdk")
+                || Build.MODEL.contains("Emulator")
+                || Build.MODEL.contains("Android SDK built for x86")
+                || Build.MANUFACTURER.contains("Genymotion")
+                || Build.PRODUCT.contains("sdk_google")
+                || Build.PRODUCT.contains("google_sdk")
+                || Build.PRODUCT.contains("sdk")
+                || Build.PRODUCT.contains("sdk_x86")
+                || Build.PRODUCT.contains("vbox86p")
+                || Build.PRODUCT.contains("emulator")
+                || Build.PRODUCT.contains("simulator")
+    }
+
+    /**
+     * Returns the recommended base URL based on device environment.
+     */
+    fun getDefaultBaseUrl(): String {
+        return if (isEmulator()) EMULATOR_BASE_URL else PHYSICAL_USB_BASE_URL
+    }
 
     @Volatile
-    private var currentBaseUrl: String = DEFAULT_BASE_URL
+    private var currentBaseUrl: String = getDefaultBaseUrl()
 
     @Volatile
     private var retrofitInstance: Retrofit? = null
@@ -34,7 +66,6 @@ object RetrofitClient {
 
     /**
      * Custom logging interceptor to trace HTTP requests and responses in Logcat.
-     * Invaluable for the live examiner demonstration.
      */
     private val loggingInterceptor = Interceptor { chain: Interceptor.Chain ->
         val request = chain.request()
@@ -100,7 +131,7 @@ object RetrofitClient {
         }
 
     /**
-     * Allows dynamically updating the base URL (e.g. For physical device LAN IP: http://192.168.x.x:8000/).
+     * Allows dynamically updating the base URL (e.g. For physical device LAN IP or USB reverse).
      */
     @Synchronized
     fun setBaseUrl(newUrl: String) {

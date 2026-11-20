@@ -10,6 +10,8 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
@@ -81,6 +83,14 @@ class MainActivity : AppCompatActivity() {
         val userName = prefs.getString("user_name", "Eli Ndeda") ?: "Eli Ndeda"
         tvMainGreeting.text = "Welcome, $userName"
 
+        // Auto-configure Backend URL based on device (Emulator vs Physical Phone) or saved preference
+        val savedBaseUrl = prefs.getString("backend_base_url", null)
+        if (savedBaseUrl != null) {
+            RetrofitClient.setBaseUrl(savedBaseUrl)
+        } else {
+            RetrofitClient.setBaseUrl(RetrofitClient.getDefaultBaseUrl())
+        }
+
         // 1. Direct Nav Bar click listeners
         navTabHome.setOnClickListener { showDashboard() }
         navTabLoan.setOnClickListener { switchTab(TAB_LOAN) }
@@ -117,7 +127,8 @@ class MainActivity : AppCompatActivity() {
             popup.menu.add(1, 11, 8, "⚡  Guarantor Rescue (Demo)")
             popup.menu.add(1, 12, 9, "⚡  3× Cap Exceeded (Demo)")
             popup.menu.add(1, 13, 10, "⚡  Bad Credit Default (Demo)")
-            popup.menu.add(2, 999, 11, "🔌  Ping Backend (10.0.2.2:8000)")
+            popup.menu.add(2, 999, 11, "🔌  Ping Backend")
+            popup.menu.add(2, 998, 12, "⚙️  Configure Backend Host")
             popup.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     100 -> showDashboard()
@@ -132,6 +143,7 @@ class MainActivity : AppCompatActivity() {
                     12 -> navigateToLoanWithPreset(LoanPresets.CAP_EXCEEDED)
                     13 -> navigateToLoanWithPreset(LoanPresets.BAD_CREDIT)
                     999 -> testBackendConnection()
+                    998 -> showConfigureHostDialog()
                 }
                 true
             }
@@ -143,32 +155,81 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
+     * Dialog allowing one-tap switching between Emulator, USB cable (adb reverse), or local Wi-Fi.
+     */
+    fun showConfigureHostDialog() {
+        val options = arrayOf(
+            "📱 Physical Phone via USB Cable (http://127.0.0.1:8000/)",
+            "🌐 Physical Phone via Wi-Fi (http://10.0.11.142:8000/)",
+            "💻 Android Studio Emulator (http://10.0.2.2:8000/)",
+            "✏️ Enter Custom IP Address..."
+        )
+        AlertDialog.Builder(this)
+            .setTitle("Select Backend Host (${if (RetrofitClient.isEmulator()) "Emulator" else "Physical Phone"})")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> saveAndApplyBackendUrl("http://127.0.0.1:8000/")
+                    1 -> saveAndApplyBackendUrl("http://10.0.11.142:8000/")
+                    2 -> saveAndApplyBackendUrl("http://10.0.2.2:8000/")
+                    3 -> showCustomIpInputDialog()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun showCustomIpInputDialog() {
+        val input = EditText(this)
+        input.hint = "e.g. http://192.168.1.50:8000/"
+        input.setText(RetrofitClient.getBaseUrl())
+        AlertDialog.Builder(this)
+            .setTitle("Enter Custom Backend URL")
+            .setView(input)
+            .setPositiveButton("Save & Test") { _, _ ->
+                val entered = input.text.toString().trim()
+                if (entered.isNotEmpty()) {
+                    val formatted = if (entered.startsWith("http://") || entered.startsWith("https://")) entered else "http://$entered"
+                    saveAndApplyBackendUrl(formatted)
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun saveAndApplyBackendUrl(url: String) {
+        val prefs = getSharedPreferences("chama_user_prefs", Context.MODE_PRIVATE)
+        prefs.edit().putString("backend_base_url", url).apply()
+        RetrofitClient.setBaseUrl(url)
+        Toast.makeText(this, "Backend host set to: $url", Toast.LENGTH_SHORT).show()
+        testBackendConnection()
+    }
+
+    /**
      * Pings the FastAPI backend service to verify connectivity.
      * Useful for examiner demonstration and offline diagnostics.
      */
     fun testBackendConnection() {
-        if (!NetworkUtils.isNetworkAvailable(this)) {
-            Toast.makeText(this, "Device is offline. Please check network/Wi-Fi connection.", Toast.LENGTH_LONG).show()
-            return
-        }
         val baseUrl = RetrofitClient.getBaseUrl()
         Toast.makeText(this, "Pinging FastAPI backend at $baseUrl...", Toast.LENGTH_SHORT).show()
         RetrofitClient.apiService.getHealthCheck().enqueue(object : retrofit2.Callback<Map<String, Any>> {
             override fun onResponse(call: retrofit2.Call<Map<String, Any>>, response: retrofit2.Response<Map<String, Any>>) {
                 if (response.isSuccessful) {
-                    Toast.makeText(this@MainActivity, "Connected! Backend is ONLINE (HTTP 200).", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@MainActivity, "Connected! Backend is ONLINE (HTTP 200) at $baseUrl", Toast.LENGTH_LONG).show()
                 } else {
                     Toast.makeText(this@MainActivity, "Backend reached: HTTP ${response.code()}", Toast.LENGTH_LONG).show()
                 }
             }
 
             override fun onFailure(call: retrofit2.Call<Map<String, Any>>, t: Throwable) {
-                val reason = when (t) {
-                    is java.net.ConnectException -> "Connection refused: Ensure FastAPI is running on $baseUrl"
-                    is java.net.SocketTimeoutException -> "Timed out waiting for backend response."
-                    else -> t.localizedMessage ?: "Network error"
+                val isEmu = RetrofitClient.isEmulator()
+                val advice = if (!isEmu && baseUrl.contains("10.0.2.2")) {
+                    "\n\nTip: You are on a physical phone! 10.0.2.2 only works on emulators. Go to 'Configure Backend Host' -> USB (127.0.0.1) or Wi-Fi (10.0.11.142)."
+                } else if (!isEmu && baseUrl.contains("127.0.0.1")) {
+                    "\n\nTip: For USB, ensure 'adb reverse tcp:8000 tcp:8000' is active, or select Wi-Fi host."
+                } else {
+                    "\n\nEnsure FastAPI is running on port 8000."
                 }
-                Toast.makeText(this@MainActivity, "Backend OFFLINE: $reason", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@MainActivity, "Backend OFFLINE: ${t.localizedMessage ?: "Failed to connect"}$advice", Toast.LENGTH_LONG).show()
             }
         })
     }
