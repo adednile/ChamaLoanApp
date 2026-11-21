@@ -51,7 +51,7 @@
                         android:id="@+id/tvProfileFullName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Eli Ndeda"
+                        android:text="User Name"
                         android:textColor="@color/text_primary"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -60,7 +60,7 @@
                         android:id="@+id/tvProfileMemberId"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Member ID: MBR-0191959 • Tier 1 Active"
+                        android:text="ID: MBR-XXXXXX"
                         android:textColor="@color/text_secondary"
                         android:textSize="12sp" />
 
@@ -68,7 +68,7 @@
                         android:id="@+id/tvProfileChamaName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Mwangaza Self-Help Group (Chama)"
+                        android:text="Mwangaza Chama"
                         android:textColor="@color/brand_primary"
                         android:textSize="11sp"
                         android:textStyle="bold" />
@@ -99,6 +99,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/tvProfileRoleBadge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -133,7 +134,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Update details used for Chama disbursements &amp; SMS notifications"
+                android:text="Update your details used for Chama disbursements &amp; notifications"
                 android:textColor="@color/text_secondary"
                 android:textSize="11sp"
                 android:layout_marginBottom="12dp" />
@@ -143,28 +144,28 @@
                 android:id="@+id/etProfileName"
                 style="@style/LoanFieldInput"
                 android:inputType="textPersonName"
-                android:text="Eli Ndeda" />
+                android:hint="Full Name" />
 
             <TextView style="@style/LoanFieldLabel" android:text="Phone Number (M-Pesa Registered)" />
             <EditText
                 android:id="@+id/etProfilePhone"
                 style="@style/LoanFieldInput"
                 android:inputType="phone"
-                android:text="+254 712 345678" />
+                android:hint="Phone Number" />
 
             <TextView style="@style/LoanFieldLabel" android:text="Email Address" />
             <EditText
                 android:id="@+id/etProfileEmail"
                 style="@style/LoanFieldInput"
                 android:inputType="textEmailAddress"
-                android:text="elindeda1@gmail.com" />
+                android:hint="Your Email Address" />
 
             <TextView style="@style/LoanFieldLabel" android:text="National ID / Passport Number" />
             <EditText
                 android:id="@+id/etProfileNationalId"
                 style="@style/LoanFieldInput"
                 android:inputType="number"
-                android:text="36481959"
+                android:hint="National ID"
                 android:enabled="false" />
 
             <Button
@@ -267,6 +268,7 @@
                     android:textColor="@color/text_primary"
                     android:textSize="13sp" />
                 <TextView
+                    android:id="@+id/tvProfileAffiliation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Mwangaza Chama"
@@ -276,7 +278,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- ── System Info & Sign Out ── -->
+        <!-- ── System Info & Sign Out (Named 'Sign Out') ── -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -302,14 +304,15 @@
                 android:textSize="11sp"
                 android:layout_marginBottom="12dp" />
 
+            <!-- Sign Out button (Issue 3: named 'Sign Out') -->
             <Button
                 android:id="@+id/btnLogout"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
                 android:backgroundTint="@color/status_rejected"
-                android:text="Sign Out of Session"
+                android:text="Sign Out"
                 android:textColor="@android:color/white"
-                android:textSize="12sp"
+                android:textSize="13sp"
                 android:textStyle="bold" />
         </LinearLayout>
 

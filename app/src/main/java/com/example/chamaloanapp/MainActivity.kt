@@ -78,10 +78,37 @@ class MainActivity : AppCompatActivity() {
         tvToolbarSubtitle = findViewById(R.id.tvToolbarSubtitle)
         tvMainGreeting = findViewById(R.id.tvMainGreeting)
 
-        // Populate personalized user name from SharedPreferences
+        // Populate personalized user name and role from SharedPreferences
         val prefs = getSharedPreferences("chama_user_prefs", Context.MODE_PRIVATE)
-        val userName = prefs.getString("user_name", "Eli Ndeda") ?: "Eli Ndeda"
+        val userName = prefs.getString("user_name", "User") ?: "User"
+        val userRole = prefs.getString("user_role", "MEMBER") ?: "MEMBER"
+        val isTreasurer = (userRole == "TREASURER")
+        val chamaName = prefs.getString("chama_name", "Mwangaza Chama") ?: "Mwangaza Chama"
+        val groupCode = prefs.getString("group_code", "CH-4482") ?: "CH-4482"
+        val memberId = prefs.getString("member_id", if (isTreasurer) "TRS-0191901" else "MBR-0191959") ?: (if (isTreasurer) "TRS-0191901" else "MBR-0191959")
+
         tvMainGreeting.text = "Welcome, $userName"
+        findViewById<TextView>(R.id.tvMainChamaHeader)?.text = "${chamaName.uppercase(java.util.Locale.US)} • $groupCode"
+        findViewById<TextView>(R.id.tvMainMemberSubtitle)?.text = "${if (isTreasurer) "Treasurer ID" else "Member ID"}: $memberId • ${if (isTreasurer) "Admin Console" else "Active Tier 1"}"
+        val roleBadge = findViewById<TextView>(R.id.tvMainRoleBadge)
+        if (isTreasurer) {
+            roleBadge?.text = "TREASURER"
+            roleBadge?.setBackgroundResource(R.drawable.bg_badge_pending)
+            roleBadge?.setTextColor(ContextCompat.getColor(this, R.color.status_pending))
+        } else {
+            roleBadge?.text = "MEMBER"
+            roleBadge?.setBackgroundResource(R.drawable.bg_badge_approved)
+            roleBadge?.setTextColor(ContextCompat.getColor(this, R.color.status_approved))
+        }
+
+        // Role-based visibility: Members cannot view or access the Treasury Console
+        if (!isTreasurer) {
+            navTabTreasurer.visibility = View.GONE
+            findViewById<LinearLayout>(R.id.cardActionTreasury)?.visibility = View.GONE
+        } else {
+            navTabTreasurer.visibility = View.VISIBLE
+            findViewById<LinearLayout>(R.id.cardActionTreasury)?.visibility = View.VISIBLE
+        }
 
         // Auto-configure Backend URL based on device (Emulator vs Physical Phone) or saved preference
         val savedBaseUrl = prefs.getString("backend_base_url", null)
@@ -95,7 +122,13 @@ class MainActivity : AppCompatActivity() {
         navTabHome.setOnClickListener { showDashboard() }
         navTabLoan.setOnClickListener { switchTab(TAB_LOAN) }
         navTabLedger.setOnClickListener { switchTab(TAB_LEDGER) }
-        navTabTreasurer.setOnClickListener { switchTab(TAB_TREASURER) }
+        navTabTreasurer.setOnClickListener {
+            if (isTreasurer) {
+                switchTab(TAB_TREASURER)
+            } else {
+                Toast.makeText(this, "Access Denied: Restricted to Chama Treasurers.", Toast.LENGTH_SHORT).show()
+            }
+        }
         navTabBylaws.setOnClickListener { switchTab(TAB_BYLAWS) }
         navTabProfile.setOnClickListener { switchTab(TAB_PROFILE) }
 
@@ -110,7 +143,11 @@ class MainActivity : AppCompatActivity() {
             switchTab(TAB_LEDGER)
         }
         findViewById<LinearLayout>(R.id.cardActionTreasury).setOnClickListener {
-            switchTab(TAB_TREASURER)
+            if (isTreasurer) {
+                switchTab(TAB_TREASURER)
+            } else {
+                Toast.makeText(this, "Access Denied: Restricted to Chama Treasurers.", Toast.LENGTH_SHORT).show()
+            }
         }
 
         // 3. Quick Overflow Menu
@@ -120,13 +157,17 @@ class MainActivity : AppCompatActivity() {
             popup.menu.add(0, TAB_LOAN + 1, 1, "💳  Apply for Loan")
             popup.menu.add(0, TAB_HISTORY + 1, 2, "📋  Loan Records & History")
             popup.menu.add(0, TAB_LEDGER + 1, 3, "📊  My Ledger & Statement")
-            popup.menu.add(0, TAB_TREASURER + 1, 4, "💼  Treasurer Console")
+            if (isTreasurer) {
+                popup.menu.add(0, TAB_TREASURER + 1, 4, "💼  Treasurer Console")
+            }
             popup.menu.add(0, TAB_BYLAWS + 1, 5, "📜  Chama Bylaws")
             popup.menu.add(0, TAB_PROFILE + 1, 6, "👤  User Profile & Settings")
-            popup.menu.add(1, 10, 7, "⚡  Prime Member (Demo)")
-            popup.menu.add(1, 11, 8, "⚡  Guarantor Rescue (Demo)")
-            popup.menu.add(1, 12, 9, "⚡  3× Cap Exceeded (Demo)")
-            popup.menu.add(1, 13, 10, "⚡  Bad Credit Default (Demo)")
+            if (isTreasurer) {
+                popup.menu.add(1, 10, 7, "⚡  Prime Member (Demo)")
+                popup.menu.add(1, 11, 8, "⚡  Guarantor Rescue (Demo)")
+                popup.menu.add(1, 12, 9, "⚡  3× Cap Exceeded (Demo)")
+                popup.menu.add(1, 13, 10, "⚡  Bad Credit Default (Demo)")
+            }
             popup.menu.add(2, 999, 11, "🔌  Ping Backend")
             popup.menu.add(2, 998, 12, "⚙️  Configure Backend Host")
             popup.setOnMenuItemClickListener { item ->
@@ -245,6 +286,13 @@ class MainActivity : AppCompatActivity() {
 
     /** Switches to any of the sub-screens inside the Fragment container */
     fun switchTab(tab: Int) {
+        val prefs = getSharedPreferences("chama_user_prefs", Context.MODE_PRIVATE)
+        val userRole = prefs.getString("user_role", "MEMBER") ?: "MEMBER"
+        if (tab == TAB_TREASURER && userRole != "TREASURER") {
+            Toast.makeText(this, "Access Denied: The Treasury Console is restricted to Chama Treasurers.", Toast.LENGTH_LONG).show()
+            return
+        }
+
         currentTab = tab
         dashboardScrollView.visibility = View.GONE
         fragmentContainer.visibility = View.VISIBLE

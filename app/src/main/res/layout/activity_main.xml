@@ -93,6 +93,7 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/tvMainChamaHeader"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="MWANGAZA CHAMA • REG #CH-4482"
@@ -111,6 +112,7 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tvMainMemberSubtitle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Member ID: MBR-0191959 • Tier 1 Active"
@@ -119,6 +121,7 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tvMainRoleBadge"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_badge_approved"

@@ -26,20 +26,34 @@ class ProfileFragment : Fragment() {
         val etProfileName = view.findViewById<EditText>(R.id.etProfileName)
         val etProfilePhone = view.findViewById<EditText>(R.id.etProfilePhone)
         val etProfileEmail = view.findViewById<EditText>(R.id.etProfileEmail)
+        val etProfileNationalId = view.findViewById<EditText>(R.id.etProfileNationalId)
         val tvProfileFullName = view.findViewById<TextView>(R.id.tvProfileFullName)
+        val tvProfileMemberId = view.findViewById<TextView>(R.id.tvProfileMemberId)
+        val tvProfileChamaName = view.findViewById<TextView>(R.id.tvProfileChamaName)
+        val tvProfileRoleBadge = view.findViewById<TextView>(R.id.tvProfileRoleBadge)
+        val tvProfileAffiliation = view.findViewById<TextView>(R.id.tvProfileAffiliation)
         val tvAvatarInitials = view.findViewById<TextView>(R.id.tvAvatarInitials)
         val btnSaveProfile = view.findViewById<Button>(R.id.btnSaveProfile)
         val btnLogout = view.findViewById<Button>(R.id.btnLogout)
 
-        // Load saved or default profile values
-        val savedName = prefs.getString("user_name", "Eli Ndeda") ?: "Eli Ndeda"
-        val savedPhone = prefs.getString("user_phone", "+254 712 345678") ?: "+254 712 345678"
-        val savedEmail = prefs.getString("user_email", "elindeda1@gmail.com") ?: "elindeda1@gmail.com"
+        // Load saved profile values (no hardcoded fallback email)
+        val savedName = prefs.getString("user_name", "User") ?: "User"
+        val savedPhone = prefs.getString("user_phone", "") ?: ""
+        val savedEmail = prefs.getString("user_email", "") ?: ""
+        val savedMemberId = prefs.getString("member_id", "MBR-XXXX") ?: "MBR-XXXX"
+        val savedRole = prefs.getString("user_role", "MEMBER") ?: "MEMBER"
+        val savedChama = prefs.getString("chama_name", "Mwangaza Self-Help Group") ?: "Mwangaza Self-Help Group"
+        val savedNationalId = prefs.getString("national_id", "") ?: ""
 
         etProfileName.setText(savedName)
         etProfilePhone.setText(savedPhone)
         etProfileEmail.setText(savedEmail)
+        etProfileNationalId?.setText(savedNationalId)
         tvProfileFullName.text = savedName
+        tvProfileMemberId?.text = "ID: $savedMemberId"
+        tvProfileChamaName?.text = savedChama
+        tvProfileAffiliation?.text = savedChama
+        tvProfileRoleBadge?.text = "ROLE: $savedRole"
 
         fun updateAvatar(name: String) {
             val parts = name.trim().split(" ")

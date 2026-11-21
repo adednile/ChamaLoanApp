@@ -67,16 +67,16 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Enter your Member ID and PIN to continue"
+                android:text="Enter your ID, Phone, or Email and 4-Digit PIN"
                 android:textColor="@color/text_secondary"
                 android:textSize="12sp"
                 android:layout_marginBottom="20dp" />
 
-            <!-- Member ID -->
+            <!-- Member / Treasurer ID or Email -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Member ID / Phone Number"
+                android:text="Member ID / Treasurer ID / Phone / Email"
                 android:textColor="@color/text_primary"
                 android:textSize="12sp"
                 android:textStyle="bold"
@@ -85,7 +85,7 @@
                 android:id="@+id/etLoginMemberId"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:hint="e.g. MBR-0191959 or +254712345678"
+                android:hint="e.g. MBR-0191959 or 0712345678"
                 android:inputType="text"
                 android:textSize="14sp"
                 android:paddingHorizontal="12dp"
@@ -105,7 +105,7 @@
                 android:id="@+id/etLoginPin"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:hint="Enter your PIN"
+                android:hint="••••"
                 android:inputType="numberPassword"
                 android:maxLength="4"
                 android:textSize="20sp"
@@ -132,7 +132,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/bg_btn_primary"
-                android:text="Sign In to My Chama"
+                android:text="Sign In"
                 android:textColor="@android:color/white"
                 android:textSize="14sp"
                 android:textStyle="bold"
@@ -144,25 +144,45 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="14dp">
                 <View android:layout_width="0dp" android:layout_height="1dp"
                     android:layout_weight="1" android:background="@color/border_light" />
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="  or  " android:textColor="@color/text_muted" android:textSize="12sp" />
+                    android:text="  Quick Examiner Demo Access  " android:textColor="@color/text_muted" android:textSize="11sp" />
                 <View android:layout_width="0dp" android:layout_height="1dp"
                     android:layout_weight="1" android:background="@color/border_light" />
             </LinearLayout>
 
-            <!-- Demo Access -->
-            <Button
-                android:id="@+id/btnDemoLogin"
+            <!-- Dual Demo Access: Member vs Treasurer -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="46dp"
-                android:backgroundTint="@color/status_pending_bg"
-                android:text="⚡  Continue as Demo User"
-                android:textColor="@color/status_pending"
-                android:textSize="13sp"
-                android:textStyle="bold" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnDemoMember"
+                    android:layout_width="0dp"
+                    android:layout_height="44dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/status_pending_bg"
+                    android:text="👤 Demo Member"
+                    android:textColor="@color/status_pending"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:layout_marginEnd="4dp" />
+
+                <Button
+                    android:id="@+id/btnDemoTreasurer"
+                    android:layout_width="0dp"
+                    android:layout_height="44dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/status_warning_bg"
+                    android:text="💼 Demo Treasurer"
+                    android:textColor="@color/status_warning"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="4dp" />
+            </LinearLayout>
         </LinearLayout>
 
         <!-- Register Link -->
@@ -180,7 +200,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New to your Chama app?"
+                android:text="Don't have an account yet?"
                 android:textColor="@color/text_secondary"
                 android:textSize="12sp"
                 android:layout_marginBottom="8dp" />
@@ -190,7 +210,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
                 android:backgroundTint="@color/brand_primary_light"
-                android:text="Create Member Account"
+                android:text="Register as Member or Treasurer"
                 android:textColor="@color/brand_primary"
                 android:textSize="13sp"
                 android:textStyle="bold" />

@@ -4,15 +4,18 @@ import java.util.Locale
 import java.util.regex.Pattern
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Data Models for M-Pesa Ledger Ingestion
+// Data Models for M-Pesa Ledger Ingestion & Chama Management
 // ─────────────────────────────────────────────────────────────────────────────
 
 data class ChamaMember(
     val memberId: String,
     val fullName: String,
     val phoneNormalized: String, // e.g. "254712345678"
-    var totalSavingsKes: Float,
-    var activeLoanBalanceKes: Float
+    val email: String = "",
+    val groupCode: String = "CH-4482",
+    val role: String = "MEMBER", // "MEMBER" or "TREASURER"
+    var totalSavingsKes: Float = 0f,
+    var activeLoanBalanceKes: Float = 0f
 )
 
 enum class TransactionType(val label: String) {
@@ -125,18 +128,53 @@ object MpesaParserEngine {
 
 object ChamaLedgerRepository {
 
+    // Registered Chama groups: Code -> Name
+    val chamaGroups = mutableMapOf(
+        "CH-4482" to "Mwangaza Chama",
+        "CH-1001" to "Ushirika Chama"
+    )
+
+    // Members list
     val members = mutableListOf(
-        ChamaMember("MBR-0191959", "Eli Ndeda", "254712345678", totalSavingsKes = 40000f, activeLoanBalanceKes = 0f),
-        ChamaMember("MBR-0191917", "Alex Mutitu", "254722123456", totalSavingsKes = 35000f, activeLoanBalanceKes = 15000f),
-        ChamaMember("MBR-0191834", "Faith Wanjiku", "254733987654", totalSavingsKes = 50000f, activeLoanBalanceKes = 0f),
-        ChamaMember("MBR-0191755", "Kevin Otieno", "254710554433", totalSavingsKes = 28000f, activeLoanBalanceKes = 8000f),
-        ChamaMember("MBR-0191620", "Grace Chebet", "254720112233", totalSavingsKes = 62000f, activeLoanBalanceKes = 0f)
+        ChamaMember("MBR-0191959", "Eli Ndeda", "254712345678", email = "elindeda1@gmail.com", groupCode = "CH-4482", role = "MEMBER", totalSavingsKes = 40000f, activeLoanBalanceKes = 0f),
+        ChamaMember("MBR-0191917", "Alex Mutitu", "254722123456", email = "alexmutitu@gmail.com", groupCode = "CH-4482", role = "MEMBER", totalSavingsKes = 35000f, activeLoanBalanceKes = 15000f),
+        ChamaMember("MBR-0191834", "Faith Wanjiku", "254733987654", email = "faithwanjiku@gmail.com", groupCode = "CH-4482", role = "MEMBER", totalSavingsKes = 50000f, activeLoanBalanceKes = 0f),
+        ChamaMember("MBR-0191755", "Kevin Otieno", "254710554433", email = "kevinotieno@gmail.com", groupCode = "CH-4482", role = "MEMBER", totalSavingsKes = 28000f, activeLoanBalanceKes = 8000f),
+        ChamaMember("MBR-0191620", "Grace Chebet", "254720112233", email = "gracechebet@gmail.com", groupCode = "CH-4482", role = "MEMBER", totalSavingsKes = 62000f, activeLoanBalanceKes = 0f)
     )
 
     val transactionHistory = mutableListOf<ParsedMpesaTransaction>()
 
     var groupTotalSavingsPoolKes: Float = 285000f
     var groupActiveDisbursedKes: Float = 150000f
+
+    fun registerChama(code: String, name: String) {
+        chamaGroups[code.uppercase(Locale.US).trim()] = name.trim()
+    }
+
+    fun isValidGroupCode(code: String): Boolean {
+        return chamaGroups.containsKey(code.uppercase(Locale.US).trim())
+    }
+
+    fun getChamaName(code: String): String {
+        return chamaGroups[code.uppercase(Locale.US).trim()] ?: "Chama Trust ($code)"
+    }
+
+    fun addMember(member: ChamaMember) {
+        // Replace or add
+        members.removeAll { it.memberId == member.memberId || it.phoneNormalized == member.phoneNormalized }
+        members.add(member)
+    }
+
+    fun removeMember(memberId: String): Boolean {
+        return members.removeAll { it.memberId == memberId }
+    }
+
+    fun getMembersForGroup(groupCode: String): List<ChamaMember> {
+        val clean = groupCode.uppercase(Locale.US).trim()
+        val list = members.filter { it.groupCode.uppercase(Locale.US).trim() == clean }
+        return if (list.isNotEmpty()) list else members // fallback to general list if demo code
+    }
 
     fun matchMember(phone: String, senderName: String): ChamaMember? {
         val normPhone = MpesaParserEngine.normalizePhoneNumber(phone)
