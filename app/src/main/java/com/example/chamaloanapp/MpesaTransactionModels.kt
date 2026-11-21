@@ -172,8 +172,23 @@ object ChamaLedgerRepository {
 
     fun getMembersForGroup(groupCode: String): List<ChamaMember> {
         val clean = groupCode.uppercase(Locale.US).trim()
-        val list = members.filter { it.groupCode.uppercase(Locale.US).trim() == clean }
-        return if (list.isNotEmpty()) list else members // fallback to general list if demo code
+        return members.filter { it.groupCode.uppercase(Locale.US).trim() == clean }
+    }
+
+    fun getMember(memberId: String): ChamaMember? {
+        return members.find { it.memberId == memberId }
+    }
+
+    fun getGroupSavingsPool(groupCode: String): Float {
+        val groupMembers = getMembersForGroup(groupCode)
+        val sum = groupMembers.sumOf { it.totalSavingsKes.toDouble() }.toFloat()
+        return if (groupMembers.isNotEmpty()) sum else 0f
+    }
+
+    fun getGroupActiveDisbursed(groupCode: String): Float {
+        val groupMembers = getMembersForGroup(groupCode)
+        val sum = groupMembers.sumOf { it.activeLoanBalanceKes.toDouble() }.toFloat()
+        return if (groupMembers.isNotEmpty()) sum else 0f
     }
 
     fun matchMember(phone: String, senderName: String): ChamaMember? {

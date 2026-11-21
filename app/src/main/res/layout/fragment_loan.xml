@@ -59,7 +59,7 @@
                     android:background="@drawable/bg_badge_approved"
                     android:paddingHorizontal="10dp"
                     android:paddingVertical="4dp"
-                    android:text="Mwangaza Chama"
+                    android:text="Chama Facility"
                     android:textColor="@color/status_approved"
                     android:textSize="11sp"
                     android:textStyle="bold" />
