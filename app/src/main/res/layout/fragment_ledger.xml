@@ -30,6 +30,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tvLedgerMemberMeta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Member ID: MBR-0191959 • Tier 1 Equity Holder"
@@ -48,8 +49,13 @@
                     android:padding="10dp" android:layout_marginEnd="6dp" android:orientation="vertical">
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                         android:text="Cumulative Shares" android:textSize="11sp" android:textColor="@color/text_secondary" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:text="KES 40,000" android:textSize="16sp" android:textStyle="bold"
+                    <TextView
+                        android:id="@+id/tvLedgerShares"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="KES 40,000"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
                         android:textColor="@color/brand_primary" />
                 </LinearLayout>
 

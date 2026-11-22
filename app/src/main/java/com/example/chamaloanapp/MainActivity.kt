@@ -101,6 +101,13 @@ class MainActivity : AppCompatActivity() {
             roleBadge?.setTextColor(ContextCompat.getColor(this, R.color.status_approved))
         }
 
+        // Dynamically compute user savings and instant 3x borrowing power
+        val memberObj = ChamaLedgerRepository.getMember(memberId)
+        val userSavings = memberObj?.totalSavingsKes ?: if (isTreasurer) 50000f else 40000f
+        val borrowingLimit = userSavings * 3f
+        findViewById<TextView>(R.id.tvMainSavings)?.text = String.format(java.util.Locale.US, "KES %,.0f", userSavings)
+        findViewById<TextView>(R.id.tvMainBorrowingLimit)?.text = String.format(java.util.Locale.US, "KES %,.0f", borrowingLimit)
+
         // Role-based visibility: Members cannot view or access the Treasury Console
         if (!isTreasurer) {
             navTabTreasurer.visibility = View.GONE
