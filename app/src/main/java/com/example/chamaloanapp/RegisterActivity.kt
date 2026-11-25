@@ -167,7 +167,7 @@ class RegisterActivity : AppCompatActivity() {
                 email = email,
                 groupCode = groupCode,
                 role = roleStr,
-                totalSavingsKes = if (isTreasurer) 50000f else 10000f,
+                totalSavingsKes = 0.0f,
                 activeLoanBalanceKes = 0f
             )
             ChamaLedgerRepository.addMember(newMember)
